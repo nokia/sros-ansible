@@ -1,5 +1,6 @@
 ![NOKIA](https://raw.githubusercontent.com/nokia/nsp-workflow/master/logo.png)
-# Nokia SR OS Ansible Collection
+# Ansible Collection - nokia.sros
+
 ***
 
 The collection is provide automation for Nokia SR OS devices using Ansible by RedHat.
