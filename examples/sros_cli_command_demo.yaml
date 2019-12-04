@@ -1,0 +1,18 @@
+---
+- hosts: nokia
+  connection: network_cli
+  gather_facts: No
+
+  collections:
+  - nokia.sros
+
+  tasks:
+  - name: get system information
+    cli_command:
+      command: show system information
+    register: command_output
+
+  - name: display system information to terminal
+    debug:
+      msg: "{{command_output.stdout}}"
+...
