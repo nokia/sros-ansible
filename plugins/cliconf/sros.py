@@ -249,7 +249,7 @@ class Cliconf(CliconfBase):
             if not self.is_config_mode():
                 self.send_command('edit-config private')
             if replace and not candidate:
-                cmd = 'configure'
+                cmd = 'delete configure'
                 requests.append(cmd)
                 responses.append(self.send_command(cmd))
                 cmd = 'load full-replace {0}'.format(replace)
