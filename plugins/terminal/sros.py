@@ -36,4 +36,3 @@ class TerminalModule(TerminalBase):
 
         except AnsibleConnectionFailure:
             raise AnsibleConnectionFailure('unable to set terminal parameters')
-

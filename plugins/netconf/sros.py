@@ -84,4 +84,3 @@ class Netconf(NetconfBase):
 
         m.close_session()
         return guessed_os
-

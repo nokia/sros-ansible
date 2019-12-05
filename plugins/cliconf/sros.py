@@ -1,5 +1,5 @@
 # (c) 2019 Nokia
-# 
+#
 # Licensed under the BSD 3 Clause license
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -27,14 +27,11 @@ version_added: "2.9"
 import re
 import json
 
-from itertools import chain
-from functools import wraps
-
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.common._collections_compat import Mapping
-from ansible.module_utils._text import to_bytes, to_text
+from ansible.module_utils._text import to_text
 from ansible.module_utils.network.common.utils import to_list
-from ansible.plugins.cliconf import CliconfBase, enable_mode
+from ansible.plugins.cliconf import CliconfBase
 
 
 class Cliconf(CliconfBase):
@@ -160,10 +157,10 @@ class Cliconf(CliconfBase):
             # Reason is, that in classic CLI 'info' can not be used in context
             # of 'configure' but just for sub-contexts such as services.
 
-            if source is not 'running':
+            if source != 'running':
                 raise ValueError("fetching configuration from %s is not supported" % source)
 
-            if format is not 'text':
+            if format != 'text':
                 raise ValueError("'format' value %s is invalid. Only format supported is 'text'" % format)
 
             cmd = 'admin display-config %s' % ' '.join(flags)
@@ -179,7 +176,7 @@ class Cliconf(CliconfBase):
             if format not in self.get_option_values()['format']:
                 raise ValueError("'format' value %s is invalid. Valid values are %s" % (format, ','.join(self.get_option_values()['format'])))
 
-            if format is 'text':
+            if format == 'text':
                 cmd = 'info %s %s' % (source, ' '.join(flags))
             else:
                 cmd = 'info %s %s %s' % (source, format, ' '.join(flags))
@@ -198,7 +195,7 @@ class Cliconf(CliconfBase):
                 # provides additional options such as 'info detail' to include
                 # default values.
 
-                if source is 'startup':
+                if source == 'startup':
                     self.send_command('edit-config private')
                     self.send_command('configure')
                     self.send_command('rollback startup')
@@ -279,7 +276,7 @@ class Cliconf(CliconfBase):
             else:
                 self.send_command('discard')
                 self.send_command('quit-config')
-            raise
+            raise exc
 
         self.send_command('exit all')
         if self.is_classic_cli():
@@ -322,7 +319,7 @@ class Cliconf(CliconfBase):
         self.send_command('exit all')
 
         if self.is_classic_cli():
-            if str(rollback_id) is '0':
+            if str(rollback_id) == '0':
                 rollback_id = 'latest-rb'
             rawdiffs = self.send_command('admin rollback compare {0} to active-cfg'.format(rollback_id))
             match = re.search(br'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
@@ -354,4 +351,3 @@ class Cliconf(CliconfBase):
             return {'diff': diffs.strip()}
         else:
             return {}
-
