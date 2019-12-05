@@ -32,3 +32,6 @@ None
 * NETCONF
 * CLICONF
 * TERMINAL
+
+## Usage
+To use this collection make sure to set `ansible_network_os=nokia.sros.sros` in your host inventory.

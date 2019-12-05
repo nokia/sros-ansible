@@ -96,17 +96,13 @@ class Cliconf(CliconfBase):
         return device_info
 
     def get_capabilities(self):
-        try:
-            self.capabilities
-        except NameError:
-            self.capabilities = {}
-            self.capabilities['device_operations'] = self.get_device_operations()
-            self.capabilities['rpc'] = self.get_sros_rpc()
-            self.capabilities['device_info'] = self.get_device_info()
-            self.capabilities['network_api'] = 'cliconf'
-            self.capabilities.update(self.get_option_values())
-
-        return json.dumps(self.capabilities)
+        capabilities = super(Cliconf, self).get_capabilities()
+        capabilities['device_operations'] = self.get_device_operations()
+        capabilities['rpc'] = self.get_sros_rpc()
+        capabilities['device_info'] = self.get_device_info()
+        capabilities['network_api'] = 'cliconf'
+        capabilities.update(self.get_option_values())
+        return json.dumps(capabilities)
 
     def get_default_flag(self):
         return ['detail']
