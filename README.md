@@ -3,7 +3,7 @@
 
 ***
 
-This collection is to provide automation for Nokia SR OS devices using Ansible by RedHat.
+This [collection](https://galaxy.ansible.com/nokia/sros) is to provide automation for Nokia SR OS devices using Ansible by RedHat.
 
 ## Installation
 Distribution is via [ansible-galaxy](https://galaxy.ansible.com/).
