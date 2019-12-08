@@ -26,7 +26,8 @@ class TerminalModule(TerminalBase):
 
     def on_open_shell(self):
         try:
-            if '\n' in self._connection.get_prompt().strip():
+            prompt = self._get_prompt().strip()
+            if b'\n' in prompt:
                 # node is running md-cli
                 self._exec_cli_command(b'environment more false')
                 self._exec_cli_command(b'//environment no more')

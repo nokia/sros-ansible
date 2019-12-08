@@ -126,7 +126,8 @@ class Cliconf(CliconfBase):
         :return: True if session is running in configuration mode
         """
 
-        return self._connection.get_prompt().strip().startswith('(')
+        prompt = self._connection.get_prompt().strip()
+        return prompt.startswith(b'(')
 
     def is_classic_cli(self):
         """
@@ -149,7 +150,8 @@ class Cliconf(CliconfBase):
         :return: True if session is in classic CLI
         """
 
-        return '\n' not in self._connection.get_prompt().strip()
+        prompt = self._connection.get_prompt().strip()
+        return b'\n' not in prompt
 
     def get_config(self, source='running', format='text', flags=None):
         if self.is_classic_cli():
