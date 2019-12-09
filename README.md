@@ -19,8 +19,14 @@ ansible-galaxy collection install nokia.sros
 Tested with SR OS 19.7 and 19.10
 
 ## Playbooks
-* [sros_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_command_demo.yml)
-* [sros_cli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_config_demo.yml)
+### Classic CLI
+* [sros_classic_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_command_demo.yml)
+* [sros_classic_cli_commission.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_commission.yml)
+* [sros_classic_cli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_config_demo.yml)
+### MD-CLI
+* [sros_mdcli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_command_demo.yml)
+* [sros_mdcli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_config_demo.yml)
+### NETCONF
 * [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
 
 ## Modules
@@ -36,3 +42,5 @@ None
 
 ## Usage
 To use this collection make sure to set `ansible_network_os=nokia.sros.sros` in your host inventory.
+Nodes managed in classic-mode must have rollbacks configured (check `sros_classic_cli_commission.yml`).
+NETCONF plugin currently does not work, due to issue [#65655](https://github.com/ansible/ansible/issues/65655) in Ansible. 
