@@ -6,6 +6,14 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+DOCUMENTATION = """
+---
+author: nokia
+terminal: sros
+short_description: CLI shell support for Nokia SR OS devices (classic-cli and md-cli)
+version_added: "2.9"
+"""
+
 import re
 
 from ansible.plugins.terminal import TerminalBase
@@ -21,7 +29,7 @@ class TerminalModule(TerminalBase):
 
     terminal_stderr_re = [
         re.compile(br"[\r\n]Error: .*[\r\n]+"),
-        re.compile(br"[\r\n](WARNING|MINOR|MAJOR|CRITICAL): .*[\r\n]+")
+        re.compile(br"[\r\n](MINOR|MAJOR|CRITICAL): .*[\r\n]+")
     ]
 
     def on_open_shell(self):

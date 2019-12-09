@@ -6,6 +6,14 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+DOCUMENTATION = """
+---
+author: nokia
+netconf: sros
+short_description: NETCONF support for Nokia SR OS devices
+version_added: "2.9"
+"""
+
 import json
 import re
 
@@ -80,7 +88,7 @@ class Netconf(NetconfBase):
         guessed_os = None
         for c in m.server_capabilities:
             if re.search('urn:nokia.com:sros:ns:yang:sr', c):
-                guessed_os = 'sros'
+                guessed_os = 'nokia.sros.sros'
 
         m.close_session()
         return guessed_os

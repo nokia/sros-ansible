@@ -10,7 +10,7 @@ DOCUMENTATION = """
 ---
 author: Nokia
 cliconf: sros
-short_description: Use sros cliconf to run command on Nokia SR OS devices
+short_description: Use sros cliconf to configure and run CLI commands on Nokia SR OS devices
 description:
   - This SROS plugin provides low level abstraction apis for sending and
     receiving CLI commands from Nokia SR OS network devices.

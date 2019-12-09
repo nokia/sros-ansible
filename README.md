@@ -13,14 +13,15 @@ ansible-galaxy collection install nokia.sros
 ```
 
 ## Requirements
-* Ansible 2.8+
+* Ansible 2.9+
 
 ## Supported Nokia SR OS versions
-Tested with SR OS 19.7.R1
+Tested with SR OS 19.7 and 19.10
 
 ## Playbooks
-* sros_cli_command_demo.yaml
-* sros_cli_config_demo.yaml
+* [sros_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_command_demo.yml)
+* [sros_cli_config_demo.yml]https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_config_demo.yml)
+* [sros_nc_state_demo.yml]https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
 
 ## Modules
 None

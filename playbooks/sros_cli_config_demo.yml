@@ -1,5 +1,11 @@
 ---
 - hosts: nokia
+  vars_prompt:
+    - name: ansible_user
+      prompt: "Username"
+      private: no
+    - name: ansible_password
+      prompt: "Password"
   connection: network_cli
   gather_facts: No
 
