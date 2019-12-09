@@ -283,7 +283,7 @@ class Cliconf(CliconfBase):
         self.send_command('exit all')
         if self.is_classic_cli():
             rawdiffs = self.send_command('admin rollback compare')
-            match = re.search(br'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
+            match = re.search(r'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
             if match:
                 diffs = match.group(1)
                 if not commit:
@@ -324,7 +324,7 @@ class Cliconf(CliconfBase):
             if str(rollback_id) == '0':
                 rollback_id = 'latest-rb'
             rawdiffs = self.send_command('admin rollback compare {0} to active-cfg'.format(rollback_id))
-            match = re.search(br'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
+            match = re.search(r'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
             if match:
                 if commit:
                     # After executing the rollback another checkpoint is generated
