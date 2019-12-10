@@ -42,7 +42,7 @@ class Cliconf(CliconfBase):
             'supports_rollback': True,              # identify if rollback is supported or not
             'supports_defaults': True,              # identify if fetching running config with default is supported
             'supports_onbox_diff': True,            # identify if on box diff capability is supported or not
-            'supports_config_replace': True,        # identify if running config replace with candidate config is supported
+            'supports_replace': True,               # identify if running config replace with candidate config is supported
                                                     # unsupported: -------------
             'supports_admin': False,                # identify if admin configure mode is supported or not
             'supports_multiline_delimiter': False,  # identify if multiline demiliter is supported within config
@@ -241,7 +241,8 @@ class Cliconf(CliconfBase):
             #     raise ValueError("edit_config dryrun/preview using commit=False is currently not supported in Classic CLI")
 
             if replace:
-                raise ValueError("edit_config replace operation is currently not supported in Classic CLI")
+                raise ValueError("There is no edit_config operation replace support in Classic CLI. "
+                                 "It is advised to use rollback instread.")
 
         requests = []
         responses = []

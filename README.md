@@ -23,9 +23,11 @@ Tested with SR OS 19.7 and 19.10
 * [sros_classic_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_command_demo.yml)
 * [sros_classic_cli_commission.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_commission.yml)
 * [sros_classic_cli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_config_demo.yml)
+* [sros_classic_cli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_backup_restore_demo.yml)
 ### MD-CLI
 * [sros_mdcli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_command_demo.yml)
 * [sros_mdcli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_config_demo.yml)
+* [sros_mdcli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_backup_restore_demo.yml)
 ### NETCONF
 * [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
 
