@@ -1,5 +1,5 @@
 ---
-- hosts: nokia.classic
+- hosts: nokia_classic
   vars_prompt:
     - name: ansible_user
       prompt: "Username"
