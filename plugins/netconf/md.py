@@ -10,8 +10,20 @@ DOCUMENTATION = """
 ---
 author: nokia
 netconf: nokia.sros.md
-short_description: NETCONF support for Nokia SR OS devices
+short_description: Plugin to run NETCONF RPC on Nokia SR OS platform
+description:
+  - This Ansible plugin provides low-level abstraction APIs for executing commands
+    and receiving responses via NETCONF on networking devices that run Nokia SR OS.
+  - To use this plugin, please ensure that the device is running in model-driven
+    mode (aka MD MODE) and has the NETCONF protocol enabled.
 version_added: "2.9"
+options:
+  ncclient_device_handler:
+    type: str
+    default: default
+    description:
+      - Specifies the ncclient device-handler name for Nokia SR OS. Please refer to
+        the ncclient library documentation for details.
 """
 
 import json
