@@ -44,6 +44,55 @@ None
 
 ## Usage
 To use this collection make sure to set `ansible_network_os=nokia.sros.{mode}` in your host inventory.
-Nodes managed in classic-mode must have rollbacks configured. Example to enable rollback can be found in
+
+### CLASSIC MODE
+In the case of classic CLI we are relying on the built-in rollback feature.
+Therefore it is required that the rollback location is properly configured.
+For example:
+```
+     A:Antwerp# file md cf3:/rollbacks
+     *A:Antwerp# configure system rollback rollback-location cf3:/rollbacks/config
+     INFO: CLI No checkpoints currently exist at the rollback location.
+     *A:Antwerp# admin rollback save
+     Saving rollback configuration to cf3:/rollbacks/config.rb... OK
+     *A:Antwerp#
+```
+
+This Ansible collection also contains a playbook, on how to enable rollbacks:
 [sros_classic_cli_commission.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_commission.yml).
-NETCONF plugin currently does not work, due to issue [#65655](https://github.com/ansible/ansible/issues/65655) in Ansible. 
+
+After every successful configuration request one need to make sure, that a new
+checkpoint is created. If the configuration was changed through this Ansible
+plugin, the checkpoint is automatically created.
+
+Snapshot/rollback is used the following way:
+* If a configuration request runs into an error, the configuration is restored
+  by rolling back to the last checkpoint. It actually translates to a
+  rollback-on-error behavior.
+* After the configuration change was made, the running configuration is
+  compared against the previous checkpoint (supported nodal feature). This
+  is needed to provide the `change` indicator, but also to provide the
+  actual differences, if the `--diff` option was entered.
+* If operator requests to do a dry-run by providing the `--check` option,
+  the change is actually executed against the running config and reverted
+  to the last checkpoint straight away. Following that approach, syntax and
+  semantic checks will be executed - but also we get `change` indication
+  including the list of differences, if `--diff` option was provided.
+
+WARNING:
+* Be aware, that dry-run is implemented as short duration activation of the
+  new configuration with immediate rollback. So there might be service impact
+  because of this to be considered.
+* Rollback on error might have side-effects based on the way SR OS has implemented
+  the checkpoint/rollback feature. In its operation for impacted modules (such
+  as BGP within VPRN) it reverts to default configuration (e.g. shutdown) prior
+  to the execution of commands to revert the checkpoint's configuration. Please
+  check the `Basic System Config Guide` for more information.
+
+RESTRICTIONS:
+* Some platforms might not support checkpoint/rollback
+* Changes are always written directly to running
+* Operation replace is currently not supported
+
+### MD MODE
+To have the NETCONF plugin working, it is required that PR [#65718](https://github.com/ansible/ansible/pull/65718) is integrated.
