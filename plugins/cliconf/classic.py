@@ -105,7 +105,7 @@ class Cliconf(CliconfBase):
         reply = self.send_command('/show system information')
         data = to_text(reply, errors='surrogate_or_strict').strip()
         match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
-        return not match or match.group(1)=='classic'
+        return not match or match.group(1) == 'classic'
 
     def get_config(self, source='running', format='text', flags=None):
         if source != 'running':

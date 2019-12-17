@@ -29,11 +29,8 @@ output:
     sros_config_mode: "classic"
 '''
 
-import json
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from ansible.module_utils._text import to_text
 
 
 def main():
@@ -41,12 +38,10 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec)
     connection = Connection(module._socket_path)
 
-    result = {
-      'changed': False,
-      'output': connection.get_device_info()
-    }
+    result = {'changed': False, 'output': connection.get_device_info()}
 
     module.exit_json(**result)
+
 
 if __name__ == '__main__':
     main()

@@ -50,7 +50,7 @@ class TerminalModule(TerminalBase):
             reply = self._exec_cli_command(b'/show system information')
             data = to_text(reply, errors='surrogate_or_strict').strip()
             match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
-            if not match or match.group(1)=='classic':
+            if not match or match.group(1) == 'classic':
                 self.display.warning("Nokia SROS node is running in classic mode. Use:\n  ansible_network_os: nokia.sros.classic")
 
         except AnsibleConnectionFailure:
