@@ -16,7 +16,6 @@ description:
     and receiving responses via NETCONF on networking devices that run Nokia SR OS.
   - To use this plugin, please ensure that the device is running in model-driven
     mode (aka MD MODE) and has the NETCONF protocol enabled.
-version_added: "2.9"
 options:
   ncclient_device_handler:
     type: str
@@ -67,7 +66,7 @@ class Netconf(NetconfBase):
 
     def get_capabilities(self):
         result = dict()
-        result['rpc'] = self.get_base_rpc() + ['commit', 'discard_changes', 'validate', 'lock', 'unlock']
+        result['rpc'] = self.get_base_rpc()
         result['network_api'] = 'netconf'
         result['device_info'] = self.get_device_info()
         result['server_capabilities'] = [c for c in self.m.server_capabilities]
@@ -75,32 +74,3 @@ class Netconf(NetconfBase):
         result['session_id'] = self.m.session_id
         result['device_operations'] = self.get_device_operations(result['server_capabilities'])
         return json.dumps(result)
-
-    @staticmethod
-    @ensure_ncclient
-    def guess_network_os(obj):
-        try:
-            m = manager.connect(
-                host=obj._play_context.remote_addr,
-                port=obj._play_context.port or 830,
-                username=obj._play_context.remote_user,
-                password=obj._play_context.password,
-                key_filename=obj.key_filename,
-                hostkey_verify=obj.get_option('host_key_checking'),
-                look_for_keys=obj.get_option('look_for_keys'),
-                allow_agent=obj._play_context.allow_agent,
-                timeout=obj.get_option('persistent_connect_timeout'),
-                # We need to pass in the path to the ssh_config file when guessing
-                # the network_os so that a jumphost is correctly used if defined
-                ssh_config=obj._ssh_config
-            )
-        except SSHUnknownHostError as exc:
-            raise AnsibleConnectionFailure(to_native(exc))
-
-        guessed_os = None
-        for c in m.server_capabilities:
-            if re.search('urn:nokia.com:sros:ns:yang:sr', c):
-                guessed_os = 'nokia.sros.sros'
-
-        m.close_session()
-        return guessed_os
