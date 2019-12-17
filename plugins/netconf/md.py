@@ -26,20 +26,12 @@ options:
 """
 
 import json
-import re
 
-from ansible.module_utils._text import to_text, to_native
-from ansible.errors import AnsibleConnectionFailure
+from ansible.module_utils._text import to_text
 from ansible.plugins.netconf import NetconfBase
 from ansible.plugins.netconf import ensure_ncclient
 
-try:
-    from ncclient import manager
-    from ncclient.transport.errors import SSHUnknownHostError
-    from ncclient.xml_ import to_ele
-    HAS_NCCLIENT = True
-except (ImportError, AttributeError):  # paramiko and gssapi are incompatible and raise AttributeError not ImportError
-    HAS_NCCLIENT = False
+from ncclient.xml_ import to_ele
 
 
 class Netconf(NetconfBase):
