@@ -45,15 +45,17 @@ class Netconf(NetconfBase):
     def get_device_info(self):
         device_info = dict()
         device_info['network_os'] = 'nokia.sros.md'
+        device_info['network_os_platform'] = 'Nokia 7x50'
 
         xmlns = "urn:nokia.com:sros:ns:yang:sr:state"
-        f = '<state xmlns="%s"><system><platform/><bootup/><version/><lldp/></system></state>' % xmlns
+        f = '<state xmlns="%s"><system><platform/><bootup/><version/><lldp/><management-interface/></system></state>' % xmlns
         reply = to_ele(self.m.get(filter=('subtree', f)).data_xml)
 
         device_info['network_os_hostname'] = reply.findtext('.//{%s}state/{*}system/{*}lldp/{*}system-name' % xmlns)
         device_info['network_os_version'] = reply.findtext('.//{%s}state/{*}system/{*}version/{*}version-number' % xmlns)
         device_info['network_os_model'] = reply.findtext('.//{%s}state/{*}system/{*}platform' % xmlns)
-        device_info['network_os_platform'] = 'Nokia 7x50'
+        device_info['sros_config_mode'] = reply.findtext('.//{%s}state/{*}system/{*}management-interface/{*}configuration-oper-mode' % xmlns)
+
         return device_info
 
     def get_capabilities(self):

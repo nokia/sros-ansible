@@ -64,7 +64,9 @@ class Cliconf(CliconfBase):
         }
 
     def get_device_info(self):
-        device_info = {'network_os': 'nokia.sros.classic'}
+        device_info = dict()
+        device_info['network_os'] = 'nokia.sros.classic'
+        device_info['network_os_platform'] = 'Nokia 7x50'
 
         reply = self.get('show system information')
         data = to_text(reply, errors='surrogate_or_strict').strip()
