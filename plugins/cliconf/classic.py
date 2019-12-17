@@ -10,11 +10,10 @@ DOCUMENTATION = """
 ---
 author: Nokia
 cliconf: nokia.sros.classic
-short_description: Use sros cliconf to configure and run CLI commands on Nokia SR OS devices
+short_description: Cliconf plugin to configure and run CLI commands on Nokia SR OS devices (classic mode)
 description:
   - This plugin provides low level abstraction APIs for sending CLI commands and
     receiving responses from Nokia SR OS network devices.
-version_added: "2.9"
 """
 
 import re
@@ -65,7 +64,7 @@ class Cliconf(CliconfBase):
         }
 
     def get_device_info(self):
-        device_info = {'network_os': 'sros'}
+        device_info = {'network_os': 'nokia.sros.classic'}
 
         reply = self.get('show system information')
         data = to_text(reply, errors='surrogate_or_strict').strip()
@@ -82,6 +81,12 @@ class Cliconf(CliconfBase):
         if match:
             device_info['network_os_hostname'] = match.group(1)
 
+        match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
+        if match:
+            device_info['sros_config_mode'] = match.group(1)
+        else:
+            device_info['sros_config_mode'] = 'classic'
+
         return device_info
 
     def get_capabilities(self):
@@ -96,12 +101,21 @@ class Cliconf(CliconfBase):
     def get_default_flag(self):
         return ['detail']
 
+    def is_classic_mode(self):
+        reply = self.send_command('/show system information')
+        data = to_text(reply, errors='surrogate_or_strict').strip()
+        match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
+        return not match or match.group(1)=='classic'
+
     def get_config(self, source='running', format='text', flags=None):
         if source != 'running':
             raise ValueError("fetching configuration from %s is not supported" % source)
 
         if format != 'text':
             raise ValueError("'format' value %s is invalid. Only format supported is 'text'" % format)
+
+        if not self.is_classic_mode():
+            raise ValueError("Nokia SROS node is not running in classic mode. Use ansible_network_os=nokia.sros.md")
 
         cmd = 'admin display-config %s' % ' '.join(flags)
         self.send_command('exit all')
@@ -113,6 +127,9 @@ class Cliconf(CliconfBase):
     def edit_config(self, candidate=None, commit=True, replace=None, comment=None):
         operations = self.get_device_operations()
         self.check_edit_config_capability(operations, candidate, commit, replace, comment)
+
+        if not self.is_classic_mode():
+            raise ValueError("Nokia SROS node is not running in classic mode. Use ansible_network_os=nokia.sros.md")
 
         requests = []
         responses = []
@@ -152,13 +169,18 @@ class Cliconf(CliconfBase):
     def get(self, command, prompt=None, answer=None, sendonly=False, output=None, newline=True, check_all=False):
         if output:
             raise ValueError("'output' value %s is not supported for get" % output)
+
         return self.send_command(command=command, prompt=prompt, answer=answer, sendonly=sendonly, newline=newline, check_all=check_all)
 
     def rollback(self, rollback_id, commit=True):
+        if not self.is_classic_mode():
+            raise ValueError("Nokia SROS node is not running in classic mode. Use ansible_network_os=nokia.sros.md")
+
+        self.send_command('exit all')
+
         if str(rollback_id) == '0':
             rollback_id = 'latest-rb'
 
-        self.send_command('exit all')
         rawdiffs = self.send_command('admin rollback compare {0} to active-cfg'.format(rollback_id))
         match = re.search(r'\r?\n-+\r?\n(.*)\r?\n-+\r?\n', rawdiffs, re.DOTALL)
 

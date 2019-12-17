@@ -1,5 +1,7 @@
 ---
 - hosts: nokia
+  vars:
+    - ansible_network_os: nokia.sros.md
   vars_prompt:
     - name: ansible_user
       prompt: "Username"
@@ -7,7 +9,7 @@
     - name: ansible_password
       prompt: "Password"
   connection: netconf
-  gather_facts: Yes
+  gather_facts: No
 
   collections:
   - nokia.sros

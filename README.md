@@ -12,6 +12,9 @@ To install this collection, please use the following command:
 ansible-galaxy collection install nokia.sros
 ```
 
+## Usage
+To use this collection make sure to set `ansible_network_os=nokia.sros.{mode}` in your host inventory.
+
 ## Requirements
 * Ansible 2.9+
 
@@ -29,9 +32,20 @@ Tested with SR OS 19.5, 19.7 and 19.10
 * [sros_mdcli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_backup_restore_demo.yml)
 ### NETCONF
 * [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
+### Device information
+* [device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/device_info.yml)
 
 ## Modules
-None
+Module 'device_info' returns information about the networking device connected.
+Example result:
+```yaml
+  output:
+    network_os: "nokia.sros.classic"
+    network_os_hostname: "Berlin"
+    network_os_model: "7750 SR-12"
+    network_os_version: "B-19.5.R2"
+    sros_config_mode: "classic"
+```
 
 ## Roles
 None
@@ -41,9 +55,6 @@ None
 |--------------------|:--------:|:-------:|:-------:|
 | nokia.sros.md      |     Y    |    Y    |    Y    |
 | nokia.sros.classic |     Y    |    Y    |    -    |
-
-## Usage
-To use this collection make sure to set `ansible_network_os=nokia.sros.{mode}` in your host inventory.
 
 ### CLASSIC MODE
 In the case of classic CLI we are relying on the built-in rollback feature.

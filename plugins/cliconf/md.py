@@ -10,18 +10,10 @@ DOCUMENTATION = """
 ---
 author: Nokia
 cliconf: nokia.sros.md
-short_description: Use sros cliconf to configure and run CLI commands on Nokia SR OS devices
+short_description: Cliconf plugin to configure and run CLI commands on Nokia SR OS devices (model-driven mode)
 description:
-  - This SROS plugin provides low level abstraction apis for sending and
-    receiving CLI commands from Nokia SR OS network devices.
-  - The plugin has been validated against SROS 19.
-  - The plugin supports both classic CLI and model-driven CLI while it
-    also allows to change between both modes in the same session interactively.
-  - The plugin leverages MD CLI or configuration rollback in Classic CLI.
-    Some base config must be in place to ensure functionality of this plugin.
-  - For platforms that don't support md-cli or rollbacks neither, only
-    cli_command can be used.
-version_added: "2.9"
+  - This plugin provides low level abstraction APIs for sending CLI commands and
+    receiving responses from Nokia SR OS network devices.
 """
 
 import re
@@ -75,7 +67,7 @@ class Cliconf(CliconfBase):
         }
 
     def get_device_info(self):
-        device_info = {'network_os': 'sros'}
+        device_info = {'network_os': 'nokia.sros.md'}
 
         reply = self.get('show system information')
         data = to_text(reply, errors='surrogate_or_strict').strip()
@@ -91,6 +83,12 @@ class Cliconf(CliconfBase):
         match = re.search(r'System Name\s+:\s+(.+)', data)
         if match:
             device_info['network_os_hostname'] = match.group(1)
+
+        match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
+        if match:
+            device_info['sros_config_mode'] = match.group(1)
+        else:
+            device_info['sros_config_mode'] = 'classic'
 
         return device_info
 
@@ -164,12 +162,21 @@ class Cliconf(CliconfBase):
         if not self.is_config_mode():
             self.send_command('edit-config private')
 
+    def is_classic_mode(self):
+        reply = self.send_command('/show system information')
+        data = to_text(reply, errors='surrogate_or_strict').strip()
+        match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
+        return not match or match.group(1)=='classic'
+
     def get_config(self, source='running', format='text', flags=None):
         if source not in ('startup', 'running', 'candidate'):
             raise ValueError("fetching configuration from %s is not supported" % source)
 
         if format not in self.get_option_values()['format']:
             raise ValueError("'format' value %s is invalid. Valid values are %s" % (format, ','.join(self.get_option_values()['format'])))
+
+        if self.is_classic_mode():
+            raise ValueError("Nokia SROS node is running in classic mode. Use ansible_network_os=nokia.sros.classic")
 
         if self.is_classic_cli():
             self.send_command('/!md-cli')
@@ -211,6 +218,10 @@ class Cliconf(CliconfBase):
     def edit_config(self, candidate=None, commit=True, replace=None, comment=None):
         operations = self.get_device_operations()
         self.check_edit_config_capability(operations, candidate, commit, replace, comment)
+
+        if self.is_classic_mode():
+            raise ValueError("Nokia SROS node is running in classic mode. Use ansible_network_os=nokia.sros.classic")
+
         self.enable_config_mode()
 
         requests = []
@@ -256,9 +267,13 @@ class Cliconf(CliconfBase):
     def get(self, command, prompt=None, answer=None, sendonly=False, output=None, newline=True, check_all=False):
         if output:
             raise ValueError("'output' value %s is not supported for get" % output)
+
         return self.send_command(command=command, prompt=prompt, answer=answer, sendonly=sendonly, newline=newline, check_all=check_all)
 
     def rollback(self, rollback_id, commit=True):
+        if self.is_classic_mode():
+            raise ValueError("Nokia SROS node is running in classic mode. Use ansible_network_os=nokia.sros.classic")
+
         self.enable_config_mode()
 
         self.send_command('configure')

@@ -1,5 +1,7 @@
 ---
 - hosts: nokia
+  vars:
+    - ansible_network_os: nokia.sros.md
   vars_prompt:
     - name: ansible_user
       prompt: "Username"
