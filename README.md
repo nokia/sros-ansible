@@ -33,10 +33,12 @@ Tested with SR OS 19.5, 19.7 and 19.10
 ### NETCONF
 * [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
 ### Device information
-* [device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/device_info.yml)
+* [sros_cli_device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_device_info.yml)
+* [sros_nc_device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_device_info.yml)
 
 ## Modules
 Module 'device_info' returns information about the networking device connected.
+This module is designed to work with CLI and NETCONF connections.
 Example result:
 ```yaml
   output:

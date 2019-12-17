@@ -44,7 +44,7 @@ class Netconf(NetconfBase):
     @ensure_ncclient
     def get_device_info(self):
         device_info = dict()
-        device_info['network_os'] = 'sros'
+        device_info['network_os'] = 'nokia.sros.md'
 
         xmlns = "urn:nokia.com:sros:ns:yang:sr:state"
         f = '<state xmlns="%s"><system><platform/><bootup/><version/><lldp/></system></state>' % xmlns
