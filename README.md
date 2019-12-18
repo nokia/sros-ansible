@@ -43,8 +43,9 @@ Example result:
 ```yaml
   output:
     network_os: "nokia.sros.classic"
-    network_os_hostname: "Berlin"
+    network_os_hostname: "Antwerp"
     network_os_model: "7750 SR-12"
+    network_os_platform: "Nokia 7x50"
     network_os_version: "B-19.5.R2"
     sros_config_mode: "classic"
 ```

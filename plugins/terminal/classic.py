@@ -23,8 +23,8 @@ from ansible.module_utils._text import to_text
 
 class TerminalModule(TerminalBase):
     terminal_stdout_re = [
-        re.compile(br"\r?\n\r?\n\!?\*?(\((ex|gl|pr|ro)\))?\[.*\]\r?\n[ABCD]\:\S+\@\S+\#\s"),
-        re.compile(br"\r?\n\*?[ABCD]:[\w\-\.\>]+[#\$]\s")
+        re.compile(br"[\r\n]+\!?\*?(\((ex|gl|pr|ro)\))?\[.*\][\r\n]+[ABCD]\:\S+\@\S+\#\s"),
+        re.compile(br"[\r\n]+\*?[ABCD]:[\w\-\.\>]+[#\$]\s")
     ]
 
     terminal_stderr_re = [
@@ -41,17 +41,22 @@ class TerminalModule(TerminalBase):
             prompt = self._get_prompt().strip()
             if b'\n' in prompt:
                 # node is running md-cli
+                self._exec_cli_command(b'environment delete prompt')
+                self._exec_cli_command(b'environment progress-indicator admin-state disable')
                 self._exec_cli_command(b'environment more false')
-                self._exec_cli_command(b'//environment no more')
+                self._exec_cli_command(b'/!classic-cli')
+                self._exec_cli_command(b'environment no more')
+                self._exec_cli_command(b'/!md-cli')
             else:
                 # node is running classic-cli
                 self._exec_cli_command(b'environment no more')
 
-            reply = self._exec_cli_command(b'/show system information')
-            data = to_text(reply, errors='surrogate_or_strict').strip()
-            match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
-            if match and match.group(1) != 'classic':
-                self.display.warning("Nokia SROS node is not running in classic mode. Use:\n  ansible_network_os: nokia.sros.md")
-
         except AnsibleConnectionFailure:
             raise AnsibleConnectionFailure('unable to set terminal parameters')
+
+        reply = self._exec_cli_command(b'show system information')
+        data = to_text(reply, errors='surrogate_or_strict').strip()
+        match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
+        if match and match.group(1) != 'classic':
+            self.display.warning("Nokia SROS node is not running in classic mode. Use: `ansible_network_os: nokia.sros.md`")
+
