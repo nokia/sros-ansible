@@ -17,7 +17,6 @@ import re
 
 from ansible.plugins.terminal import TerminalBase
 from ansible.errors import AnsibleConnectionFailure
-from ansible.utils.display import Display
 from ansible.module_utils._text import to_text
 
 
@@ -34,7 +33,10 @@ class TerminalModule(TerminalBase):
 
     def __init__(self, *args, **kwargs):
         super(TerminalModule, self).__init__(*args, **kwargs)
-        self.display = Display()
+
+    def warning(self, msg):
+        self._connection.queue_message('warning', msg)
+        self._connection.queue_message('v', msg)
 
     def on_open_shell(self):
         try:
@@ -58,5 +60,4 @@ class TerminalModule(TerminalBase):
         data = to_text(reply, errors='surrogate_or_strict').strip()
         match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
         if match and match.group(1) != 'classic':
-            self.display.warning("Nokia SROS node is not running in classic mode. Use: `ansible_network_os: nokia.sros.md`")
-
+            self.warning("Nokia SROS node is not running in classic mode. Use: `ansible_network_os: nokia.sros.md`")
