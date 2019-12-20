@@ -36,7 +36,6 @@ class TerminalModule(TerminalBase):
 
     def warning(self, msg):
         self._connection.queue_message('warning', msg)
-        self._connection.queue_message('v', msg)
 
     def on_open_shell(self):
         try:
@@ -60,4 +59,5 @@ class TerminalModule(TerminalBase):
         data = to_text(reply, errors='surrogate_or_strict').strip()
         match = re.search(r'Configuration Mode Oper:\s+(.+)', data)
         if match and match.group(1) != 'classic':
-            self.warning("Nokia SROS node is not running in classic mode. Use: `ansible_network_os: nokia.sros.md`")
+            host = self._connection.get_option('host')
+            self.warning("%s is not running in classic mode. Use: `ansible_network_os: nokia.sros.md`" % host)
