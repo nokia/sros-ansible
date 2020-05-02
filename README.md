@@ -1,4 +1,4 @@
-![NOKIA](https://raw.githubusercontent.com/nokia/nsp-workflow/master/logo.png)
+![NOKIA](Logo_Nokia.png)
 # Ansible Collection - nokia.sros
 
 ***
@@ -12,33 +12,37 @@ To install this collection, please use the following command:
 ansible-galaxy collection install nokia.sros
 ```
 
+If you have already installed a previous version, you can  upgrade to the latest version of this collection, by adding the `--force-with-deps` option:
+```bash
+ansible-galaxy collection install nokia.sros --force-with-deps
+```
+
 ## Usage
 To use this collection make sure to set `ansible_network_os=nokia.sros.{mode}` in your host inventory.
 
 ## Requirements
-* Ansible 2.9+
+* Ansible 2.9 or newer
 
 ## Supported Nokia SR OS versions
 Tested with SR OS 19.5, 19.7 and 19.10
 
 ## Playbooks
 ### Classic CLI
-* [sros_classic_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_command_demo.yml)
-* [sros_classic_cli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_config_demo.yml)
-* [sros_classic_cli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_backup_restore_demo.yml)
+* [sros_classic_cli_command_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_classic_cli_command_demo.yml)
+* [sros_classic_cli_config_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_classic_cli_config_demo.yml)
+* [sros_classic_cli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_classic_cli_backup_restore_demo.yml)
 ### MD-CLI
-* [sros_mdcli_command_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_command_demo.yml)
-* [sros_mdcli_config_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_config_demo.yml)
-* [sros_mdcli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_mdcli_backup_restore_demo.yml)
+* [sros_mdcli_command_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_mdcli_command_demo.yml)
+* [sros_mdcli_config_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_mdcli_config_demo.yml)
+* [sros_mdcli_backup_restore_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_mdcli_backup_restore_demo.yml)
 ### NETCONF
-* [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_state_demo.yml)
+* [sros_nc_state_demo.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_nc_state_demo.yml)
 ### Device information
-* [sros_cli_device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_cli_device_info.yml)
-* [sros_nc_device_info.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_nc_device_info.yml)
+* [sros_cli_device_info.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_cli_device_info.yml)
+* [sros_nc_device_info.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_nc_device_info.yml)
 
 ## Modules
-Module 'device_info' returns information about the networking device connected.
-This module is designed to work with CLI and NETCONF connections.
+The Ansible module `device_info` returns information about the networking device connected. This module is designed to work with CLI and NETCONF connections.
 Example result:
 ```yaml
   output:
@@ -73,7 +77,7 @@ For example:
 ```
 
 This Ansible collection also contains a playbook, on how to enable rollbacks:
-[sros_classic_cli_commission.yml](https://raw.githubusercontent.com/nokia/sros-ansible/master/playbooks/sros_classic_cli_commission.yml).
+[sros_classic_cli_commission.yml](https://raw.githubusercontent.com/nokia/ansible-networking-collections/master/sros/playbooks/sros_classic_cli_commission.yml).
 
 After every successful configuration request one need to make sure, that a new
 checkpoint is created. If the configuration was changed through this Ansible
@@ -109,4 +113,6 @@ RESTRICTIONS:
 * Operation replace is currently not supported
 
 ### MD MODE
-To have the NETCONF plugin working, it is required that PR [#65718](https://github.com/ansible/ansible/pull/65718) is integrated.
+To have the NETCONF plugin working, PR [#65718](https://github.com/ansible/ansible/pull/65718) has been integrated into `ansible:devel`. So the change should become active as part of the next Ansible release, which is Ansible 2.10.
+
+PR [#65991](https://github.com/ansible/ansible/pull/65991) is tracking the backporting of this fix into Ansible 2.9.
